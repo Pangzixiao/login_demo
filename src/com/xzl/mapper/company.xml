@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    一个mapper 代表一个持久层对象， namespace指向对应的接口
+-->
+<mapper namespace="com.xzl.dao.CompanyDao">
+    <insert id="saveCompany" >
+        insert into t_company (company_name,c_password,c_phone,c_type,c_scale,c_address,c_websize,check_type,c_describe)values(#{company_name},#{c_password},#{c_phone},#{c_type},#{c_scale},#{c_address},#{c_websize},#{check_type},#{c_describe})
+    </insert>
+
+    <select id="queryCompanyById" resultType="java.util.HashMap">
+        select * from t_company where company_id = #{id}
+    </select>
+    <select id="mutiQueryCompany"  resultType="java.util.HashMap">
+        select * from t_company
+        <where>
+            <if test="company_name != null and company_name!=''">
+                and company_name = #{company_name}
+            </if>
+            <if test="check_type !=null and check_type!=''">
+                and check_type = #{check_type}
+            </if>
+        </where>
+    </select>
+</mapper>

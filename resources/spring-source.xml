@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans	xmlns="http://www.springframework.org/schema/beans"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:p="http://www.springframework.org/schema/p"
+          xmlns:tx="http://www.springframework.org/schema/tx"
+          xmlns:aop="http://www.springframework.org/schema/aop"
+          xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+          xmlns:context="http://www.springframework.org/schema/context"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://mybatis.org/schema/mybatis-spring
+		http://mybatis.org/schema/mybatis-spring.xsd">
+
+    <!-- 扫描出controller外其他的注解 -->
+    <context:component-scan base-package="com.xzl">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 配置SqlSessionFactory 对象 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 注入mybatis 配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 注入数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 整合mybatis 的映射文件 -->
+        <property name="mapperLocations" value="classpath:com/xzl/mapper/*.xml"/>
+    </bean>
+
+    <!-- 管理持久层对象 -->
+    <mybatis:scan base-package="com.xzl.dao"/>
+
+    <!-- 配置dataSource -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"/>
+
+    <!-- 读取 properties 文件 格式必须为beanid.变量名 -->
+    <context:property-override file-encoding="utf-8" location="classpath:jdbc.properties"/>
+
+    <!-- 配置事务管理器 id一般为 transactionManager -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置事务的属性 , Spring的事务管理是通过切面的方式，织入到业务逻辑层
+        常见的切面技术 ： advice 通知 ， aspectj
+        transaction-manager 指向事务管理器，如果事务管理器的 id=transactionManager , 则transaction-manager 可以省略
+    -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--
+                给要织入的方法，设置具体的事务策略，tx:method 中的属性 对应的就是业务层中的方法名
+                name 支持* . 代表部分匹配
+                isolation 代表隔离级别 mysql的默认隔离级别是不可重复读
+                roolback-for 指定对某种异常进行回滚 默认只对 RunTimeException 回滚
+                propagation  required 如果当前环境中有事务则加入事务，否则创建新的事务（默认）
+                             /required_new 无论是否有事务都开启新的事务
+                             /supported 如果当前环境中有事务则加入事务否则以非事务环境运行
+                             /never 以非事务环境运行，如果当前环境有事务则抛出异常
+            -->
+            <tx:method name="*" isolation="DEFAULT" rollback-for="java.lang.Exception" propagation="REQUIRED" read-only="false"/>
+        </tx:attributes>
+    </tx:advice>
+
+
+    <!-- 配置事务的切面 ,把事务织入到业务逻辑层 -->
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.xzl.service.*.*(..))"/>
+    </aop:config>
+
+
+</beans>

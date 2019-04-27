@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    一个mapper 代表一个持久层对象， namespace指向对应的接口
+-->
+<mapper namespace="com.xzl.dao.IntroduceDao">
+    <insert id="addIntroduce" >
+        insert into t_introduce (user_id,u_address,nation,degree,school,major,graduate_date,study_exprience,work_exprience,u_describe
+        ,job_want,min_wage,max_wage,city_want,now_state)values(#{user_id},#{u_address},#{nation},#{degree},#{school},#{major},#{graduate_date},
+        #{study_exprience},#{work_exprience},#{u_describe},#{job_want},#{min_wage},#{max_wage},#{city_want},#{now_state})
+    </insert>
+
+    <update id="updateIntroduceById">
+        update t_introduce set u_address = #{u_address},nation=#{nation},degree=#{degress},school=#{school},major=#{major},graduate_date=#{graduate_date},study_exprience=#{study_exprience},work_exprience=#{work_exprience},
+        u_describe=#{u_describe},job_want=#{job_want},min_wage=#{min_wage},max_wage=#{max_wage},city_want=#{city_want},now_state=#{now_state} where user_id = #{user_id}
+    </update>
+</mapper>

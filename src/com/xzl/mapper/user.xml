@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    一个mapper 代表一个持久层对象， namespace指向对应的接口
+-->
+<mapper namespace="com.xzl.dao.UserDao">
+    <insert id="saveUser" >
+        insert into t_user (username,password,tel,sex)values(#{username},#{password},#{tel},#{sex})
+    </insert>
+
+    <delete id="">
+        delete from t_user where username  = #{username}
+    </delete>
+
+</mapper>
