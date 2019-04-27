@@ -72,4 +72,8 @@ public class CompanyService {
         Map<String,Object> m = companyDao.queryCompanyByName(param);
         return m;
     }
+
+    public boolean updateCompany(Map<String, Object> param) {
+        return companyDao.updateCompany(param)==1;
+    }
 }

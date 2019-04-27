@@ -14,10 +14,8 @@
 </head>
 <body>
     <a href="/company/showCompanyInfo">公司信息</a>
-    <a href="">修改公司信息</a>
+    <a href="/company/queryCompanyInfo">修改公司信息</a>
     <a href="">发布招聘</a>
     <a href="">招聘列表</a>
-    <a href="">申请中心（导出面试名单）</a>
-
 </body>
 </html>

@@ -25,4 +25,6 @@ public interface CompanyDao {
 
     @Update("update t_company set check_type='已审批' where company_id = #{id}")
     int checkCompanyById(int id);
+    @Update("update t_company set c_phone=#{c_phone},c_type=#{c_type},c_scale=#{c_scale},c_address=#{c_address},c_websize=#{c_websize},c_describe=#{c_describe} where company_id = #{company_id}")
+    int updateCompany(Map<String, Object> param);
 }

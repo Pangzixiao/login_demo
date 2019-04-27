@@ -55,5 +55,29 @@ public class CompanyController {
         return mav;
     }
 
+    @RequestMapping("/queryCompanyInfo")
+    public ModelAndView queryCompanyInfo (HttpSession session){
+        ModelAndView mav = new ModelAndView("c_editCompanyInfo");
+        String company_name = (String)session.getAttribute("company_login");
+        if(company_name == null || company_name.equals("")){
+            mav.setViewName("error");
+        }else{
+            Map<String , Object> info = companyService.queryCompanyByName(company_name);
+            mav.addObject("info",info);
+        }
+        return mav;
 
+    }
+
+    @RequestMapping("/updateCompanyInfo")
+    public ModelAndView updateCompanyInfo(@RequestParam Map<String,Object> param){
+        ModelAndView mav = new ModelAndView("c_showCompanyInfo");
+        boolean b = companyService.updateCompany(param);
+        if(!b){
+            mav.setViewName("error");
+            mav.addObject("msg","修改公司名称失败");
+        }
+        mav.addObject("info",param);
+        return mav;
+    }
 }
