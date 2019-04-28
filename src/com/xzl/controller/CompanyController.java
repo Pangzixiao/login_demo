@@ -1,5 +1,6 @@
 package com.xzl.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.xzl.service.CompanyService;
 import com.xzl.service.PositionService;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -86,14 +86,68 @@ public class CompanyController {
     }
 
     @RequestMapping("/queryPositionInfoByCom")
-    public ModelAndView queryPositionInfo(HttpSession session){
+    public ModelAndView queryPositionInfo(HttpSession session,@RequestParam(required = false,defaultValue = "1") Integer page){
         ModelAndView mav = new ModelAndView("c_editPositionInfo");
         String company_name = (String)session.getAttribute("company_login");
         if(company_name == null || company_name.equals("")){
             mav.setViewName("error");
         }else{
-            List<Map<String,Object>> info = positionService.queryPositionInfoByCom(company_name);
+            PageInfo info  = positionService.queryPositionInfoByCom(page,company_name);
             mav.addObject("info",info);
+        }
+        return mav;
+    }
+
+    @RequestMapping("/addPosition")
+    public ModelAndView addPosition(HttpSession session){
+        ModelAndView mav = new ModelAndView("c_newPosition");
+        String company_name = (String)session.getAttribute("company_login");
+        if(company_name == null || company_name.equals("")){
+            mav.setViewName("error");
+        }else{
+            Map<String,Object> info = companyService.queryCompanyByName(company_name);
+            mav.addObject("info",info);
+        }
+        return mav;
+    }
+
+    @RequestMapping("/newPosition")
+    public ModelAndView newPosition(@RequestParam Map<String,Object> param){
+        ModelAndView mav = new ModelAndView("companyMain");
+        boolean b = positionService.newPosition(param);
+        if(!b){
+            mav.setViewName("error");
+            mav.addObject("msg","添加职位失败");
+        }
+        return mav;
+    }
+
+    @RequestMapping("/queryPositionById")
+    public ModelAndView queryPositionById(int position_id){
+        ModelAndView mav = new ModelAndView("c_updatePosition");
+        Map<String,Object> info = positionService.queryPositionById(position_id);
+        mav.addObject("info",info);
+        return mav;
+    }
+
+    @RequestMapping("/updatePosition")
+    public ModelAndView updatePosition(@RequestParam Map<String,Object> param){
+        ModelAndView mav = new ModelAndView("redirect:/companyMain");
+        boolean b = positionService.updatePosition(param);
+        if(!b){
+            mav.setViewName("error");
+            mav.addObject("msg","职位信息修改失败");
+        }
+        return mav;
+    }
+
+    @RequestMapping("/delPositionById")
+    public ModelAndView delPositionById(int position_id){
+        ModelAndView mav = new ModelAndView("redirect:/companyMain");
+        boolean b = positionService.delPositionById(position_id);
+        if(!b){
+            mav.addObject("msg","职位删除失败");
+            mav.setViewName("error");
         }
         return mav;
     }
