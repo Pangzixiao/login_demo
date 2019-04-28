@@ -11,11 +11,13 @@
 <html>
 <head>
     <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="//res.layui.com/layui/dist/css/layui.css"  media="all">
 </head>
 <body>
-    <a href="/company/showCompanyInfo">公司信息</a>
-    <a href="/company/queryCompanyInfo">修改公司信息</a>
-    <a href="/company/queryPositionInfoByCom">招聘信息</a>
-    <a href="">申请信息</a>
+${info}
+
 </body>
 </html>

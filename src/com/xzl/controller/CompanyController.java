@@ -1,6 +1,7 @@
 package com.xzl.controller;
 
 import com.xzl.service.CompanyService;
+import com.xzl.service.PositionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -15,6 +17,8 @@ import java.util.Map;
 public class CompanyController {
     @Resource
     CompanyService companyService;
+    @Resource
+    PositionService positionService;
 
     @RequestMapping("/c_regist")
     public ModelAndView regist(@RequestParam Map<String,Object> param, HttpSession session){
@@ -78,6 +82,19 @@ public class CompanyController {
             mav.addObject("msg","修改公司名称失败");
         }
         mav.addObject("info",param);
+        return mav;
+    }
+
+    @RequestMapping("/queryPositionInfoByCom")
+    public ModelAndView queryPositionInfo(HttpSession session){
+        ModelAndView mav = new ModelAndView("c_editPositionInfo");
+        String company_name = (String)session.getAttribute("company_login");
+        if(company_name == null || company_name.equals("")){
+            mav.setViewName("error");
+        }else{
+            List<Map<String,Object>> info = positionService.queryPositionInfoByCom(company_name);
+            mav.addObject("info",info);
+        }
         return mav;
     }
 }
