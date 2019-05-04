@@ -1,6 +1,7 @@
 package com.xzl.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xzl.service.ApplyService;
 import com.xzl.service.CompanyService;
 import com.xzl.service.PositionService;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,8 @@ public class CompanyController {
     CompanyService companyService;
     @Resource
     PositionService positionService;
+    @Resource
+    ApplyService applyService;
 
     @RequestMapping("/c_regist")
     public ModelAndView regist(@RequestParam Map<String,Object> param, HttpSession session){
@@ -148,6 +151,41 @@ public class CompanyController {
         if(!b){
             mav.addObject("msg","职位删除失败");
             mav.setViewName("error");
+        }
+        return mav;
+    }
+
+    @RequestMapping("/outdate")
+    public ModelAndView outdate(int position_id){
+        ModelAndView mav = new ModelAndView("redirect:/companyMain");
+        boolean b = positionService.outdate(position_id);
+        if(!b){
+            mav.addObject("msg","职位过期失效");
+            mav.setViewName("error");
+        }
+        return mav;
+    }
+
+    @RequestMapping("/queryApplyByPositionId")
+    public  ModelAndView queryApplyByPositionId(@RequestParam(required = false,defaultValue = "1") Integer page,int position_id){
+        ModelAndView mav = new ModelAndView("c_showApplyByPosition");
+        mav.addObject("position_id",position_id);
+        PageInfo info = applyService.queryApplyByPositionId(page,position_id);
+        mav.addObject("info",info);
+        return mav;
+    }
+
+    @RequestMapping("/queryApplyByCom")
+    public ModelAndView queryApplyByCom(HttpSession session,@RequestParam(required = false,defaultValue = "1") Integer page){
+        ModelAndView mav = new ModelAndView("c_showApplyByCom");
+        String company_name = (String)session.getAttribute("company_login");
+        if(company_name == null || company_name.equals("")){
+            mav.setViewName("error");
+            mav.addObject("msg","请先登录");
+        }else{
+
+            PageInfo info = applyService.queryApplyByCom(page,session);
+            mav.addObject("info",info);
         }
         return mav;
     }

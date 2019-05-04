@@ -1,7 +1,8 @@
 package com.xzl.controller;
 
-import com.xzl.service.IntroduceService;
-import com.xzl.service.UserService;
+import com.github.pagehelper.PageInfo;
+import com.xzl.service.*;
+import javafx.beans.binding.ObjectExpression;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,13 @@ public class UserController {
     UserService userService;
     @Resource
     IntroduceService introduceService;
+    @Resource
+    PositionService positionService;
+    @Resource
+    CompanyService companyService;
+    @Resource
+    ApplyService applyService;
+
     @RequestMapping("/regist")
     public ModelAndView regist(@RequestParam Map<String,Object> param, HttpSession session){
         ModelAndView mav = new ModelAndView("redirect:/login");
@@ -97,6 +105,76 @@ public class UserController {
             mav.addObject("msg","修改简历失败");
             mav.setViewName("error");
         }
+        return mav;
+    }
+
+    @RequestMapping("/selectPositionPre")
+    public ModelAndView selectPositionPre(){
+        ModelAndView mav = new ModelAndView("u_findPosition");
+        return mav;
+    }
+    @RequestMapping("/findPosition")
+    public ModelAndView findPosition(HttpSession session,@RequestParam(required = false,defaultValue = "1") Integer page,@RequestParam Map<String , ObjectExpression> param){
+        ModelAndView mav = new ModelAndView("u_queriedPosition");
+        PageInfo info = positionService.MutiqueryPosition(page,param);
+        mav.addObject("info",info);
+        session.setAttribute("param",param);
+        return mav;
+    }
+
+    @RequestMapping("/findPositionPage")
+    public ModelAndView findPositionPage(HttpSession session,@RequestParam(required = false,defaultValue = "1") Integer page){
+        ModelAndView mav = new ModelAndView("u_queriedPosition");
+        Map<String , ObjectExpression> param = (Map<String , ObjectExpression>)session.getAttribute("param");
+        PageInfo info = positionService.MutiqueryPosition(page,param);
+        mav.addObject("info",info);
+        session.setAttribute("param",param);
+        return mav;
+    }
+
+    @RequestMapping("/queryPositionsByCompanyId")
+    public ModelAndView queryPositionsByCompanyId(@RequestParam(required = false,defaultValue = "1") Integer page,int company_id){
+        ModelAndView mav = new ModelAndView("u_companyPositionList");
+        PageInfo info = positionService.queryPositionByCompanyId(page,company_id);
+        Map<String,Object> comp = companyService.queryCompanyById(company_id);
+        mav.addObject("info",info);
+        mav.addObject("comp",comp);
+        return mav;
+    }
+
+    @RequestMapping("/queryCompanyById")
+    public  ModelAndView queryCompanyById(int company_id){
+        ModelAndView mav = new ModelAndView("u_showCompanyInfo");
+        Map<String,Object> info = companyService.queryCompanyById(company_id);
+        mav.addObject("info",info);
+        return mav;
+    }
+
+    @RequestMapping("/queryPositionById")
+    public ModelAndView queryPositionById(int position_id){
+        ModelAndView mav = new ModelAndView("u_showPositionInfo");
+        Map<String,Object> info = positionService.queryPositionById(position_id);
+        mav.addObject("info",info);
+        return mav;
+    }
+
+    @RequestMapping("/applyPositionById")
+    public ModelAndView applyPositionById(HttpSession session,int position_id){
+        ModelAndView mav = new ModelAndView("redirect:/userMain");
+        boolean b = applyService.applyPositionById(session,position_id);
+        if(!b){
+            mav.setViewName("error");
+            mav.addObject("msg","请登录");
+        }
+        return mav;
+    }
+
+    @RequestMapping("/showMyApplay")
+    public ModelAndView showMyApplay(HttpSession session, @RequestParam(required = false,defaultValue = "1") Integer page,
+                                     @RequestParam(required = false,defaultValue = "有效") String position_status){
+        ModelAndView mav = new ModelAndView("u_showMyApply");
+        PageInfo info = applyService.queryByUserId(session,page,position_status);
+        mav.addObject("info",info);
         return mav;
     }
 }

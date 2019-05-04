@@ -13,9 +13,14 @@
     <title>Title</title>
 </head>
 <body>
-    <a href="/company/showCompanyInfo">公司信息</a>
-    <a href="/company/queryCompanyInfo">修改公司信息</a>
-    <a href="/company/queryPositionInfoByCom">招聘信息</a>
-    <a href="/company/queryApplyByCom">申请信息</a>
+
+<div>公司名称:${info.company_name}</div>
+<div>公司类型:${info.c_type}</div>
+<div>公司规模:${info.c_scale}</div>
+<div>公司地址:${info.c_address}</div>
+<div>联系方式:${info.c_phone}</div>
+<div>公司官网:${info.c_websize}</div>
+<div>公司描述:${info.c_describe}</div>
+<div>注册时间:${info.regist_date}</div>
 </body>
 </html>

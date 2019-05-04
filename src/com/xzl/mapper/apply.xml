@@ -6,9 +6,10 @@
 <!--
     一个mapper 代表一个持久层对象， namespace指向对应的接口
 -->
-<mapper namespace="com.xzl.dao.UserDao">
-    <insert id="saveUser" >
-        insert into t_user (username,password,tel,sex)values(#{username},#{password},#{tel},#{sex})
+<mapper namespace="com.xzl.dao.ApplyDao">
+    <insert id="saveApply" >
+        insert into t_apply (position_id,user_id,apply_status,apply_date,position_status)
+        values(#{position_id},#{user_id},#{apply_status},#{apply_date},#{position_status})
     </insert>
 
 

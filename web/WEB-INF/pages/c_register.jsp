@@ -37,3 +37,23 @@
     </body>
 </head>
 </html>
+
+
+<table width="98%" border="0" align="center" cellpadding="0" cellspacing="9">
+      <tr>
+        <td>公司名称：${info.company_name}</td>
+        <td>企业性质：${info.c_type}</td>
+        <td >公司规模：${info.c_scale}</td>
+      </tr>
+      <tr>
+        <td>联系电话：${info.c_phone}</td>
+        <td >公司官网：${info.websize}</td>
+      </tr>
+		<tr>
+
+        <td >通讯地址：${info.c_address}</td>
+        </tr>
+		<tr>
+        <td>&nbsp;</td>
+		</tr>
+    </table>

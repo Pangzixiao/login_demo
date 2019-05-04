@@ -13,9 +13,8 @@
     <title>Title</title>
 </head>
 <body>
-    <a href="/company/showCompanyInfo">公司信息</a>
-    <a href="/company/queryCompanyInfo">修改公司信息</a>
-    <a href="/company/queryPositionInfoByCom">招聘信息</a>
-    <a href="/company/queryApplyByCom">申请信息</a>
+
+position:${info}
+
 </body>
 </html>

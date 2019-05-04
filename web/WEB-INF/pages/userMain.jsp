@@ -14,7 +14,8 @@
 </head>
 <body>
     <a href="">账户设置</a>
-    <a href="">我的申请</a>
+    <a href="/user/selectPositionPre">职位申请</a>
+    <a href="/user/showMyApplay">我的申请</a>
     <a href="/user/showIntroduce">我的简历</a>
     <a href="/user/queryIntroduce">修改简历</a>
 </body>

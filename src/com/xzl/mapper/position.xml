@@ -8,26 +8,37 @@
 -->
 <mapper namespace="com.xzl.dao.PositionDao">
     <insert id="newPosition" >
-        insert into t_position (p_name,company_id,p_type1,p_type2,p_type3,p_address,salary,required_work,p_descript,p_request,treatment,apply_count)values
-        (#{p_name},#{company_id},#{p_type1},#{p_type2},#{p_type3},#{p_address},#{salary},#{required_work},#{p_descript},#{p_request},#{treatment},#{apply_count})
+        insert into t_position (p_name,company_id,p_type1,p_type2,p_type3,p_address,salary,required_work,p_descript,p_request,treatment,apply_count,p_date,p_state,p_cname)values
+        (#{p_name},#{company_id},#{p_type1},#{p_type2},#{p_type3},#{p_address},#{salary},#{required_work},#{p_descript},#{p_request},#{treatment},#{apply_count},#{p_date},#{p_state},#{p_cname})
     </insert>
 
     <update id="updatePosition">
         update t_position set p_name=#{p_name},company_id=#{company_id},p_type1=#{p_type1},p_type2=#{p_type2},p_type3=#{p_type3},p_address=#{p_address}
-        ,salary=#{salary},required_work=#{required_work},p_descript=#{p_descript},p_request=#{p_request},treatment=#{treatment},apply_count=#{apply_count} where position_id = #{position_id}
+        ,salary=#{salary},required_work=#{required_work},p_descript=#{p_descript},p_request=#{p_request},treatment=#{treatment},apply_count=#{apply_count} ,p_cname=#{p_cname} where position_id = #{position_id}
     </update>
-    <!--<select id="queryCompanyById" resultType="java.util.HashMap">-->
-        <!--select * from t_company where company_id = #{id}-->
-    <!--</select>-->
-    <!--<select id="mutiQueryCompany"  resultType="java.util.HashMap">-->
-        <!--select * from t_company-->
-        <!--<where>-->
-            <!--<if test="company_name != null and company_name!=''">-->
-                <!--and company_name = #{company_name}-->
-            <!--</if>-->
-            <!--<if test="check_type !=null and check_type!=''">-->
-                <!--and check_type = #{check_type}-->
-            <!--</if>-->
-        <!--</where>-->
-    <!--</select>-->
+
+    <select id="MutiqueryPosition"  resultType="java.util.HashMap">
+        select * from t_position
+        <where>
+            <if test="p_name != null and p_name!=''">
+                and p_name like '%${p_name}%'
+            </if>
+            <if test="p_type1 !=null and p_type1 !=''">
+                and p_type1 = #{p_type1}
+            </if>
+            <if test="p_type2 !=null and p_type2 !=''">
+                and p_type2 = #{p_type2}
+            </if>
+            <if test="p_type3 !=null and p_type3 !=''">
+                and p_type3 = #{p_type3}
+            </if>
+            <if test="p_address !=null and p_address !=''">
+                and p_address = #{p_address}
+            </if>
+            <if test="required_work !=null and required_work !=''">
+                and required_work = #{required_work}
+            </if>
+            and p_state='有效'
+        </where>
+    </select>
 </mapper>

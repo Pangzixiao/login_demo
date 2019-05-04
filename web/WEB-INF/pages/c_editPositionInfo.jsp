@@ -49,10 +49,32 @@
                 <a href="/company/queryPositionById?position_id=${m.position_id}">修改</a>
             </td>
             <td><a href="/company/delPositionById?position_id=${m.position_id}">删除</a></td>
-            <td><a href="">查看申请</a></td>
-            <td><a href="">失效</a></td>
+            <td><a href="/company/queryApplyByPositionId?position_id=${m.position_id}">查看申请</a></td>
+            <td><a href="/company/outdate?position_id=${m.position_id}">失效</a></td>
         </tr>
     </c:forEach>
+
+    <div class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <a href="${pageContext.request.contextPath}/company/queryPositionInfoByCom">首页</a>
+
+        <c:if test="${info.pageNum <= 1}">
+            <a href="javascript:void(0)">上一页</a>
+        </c:if>
+
+        <c:if test="${info.pageNum > 1}">
+            <a href="${pageContext.request.contextPath}/company/queryPositionInfoByCom?page=${info.pageNum -1}">上一页</a>
+        </c:if>
+
+        <c:if test="${info.pageNum >= info.pages}">
+            <a href="javascript:void(0)">下一页</a>
+        </c:if>
+
+        <c:if test="${info.pageNum < info.pages}">
+            <a href="${pageContext.request.contextPath}/company/queryPositionInfoByCom?page=${info.pageNum +1}">下一页</a>
+        </c:if>
+        <a  href="${pageContext.request.contextPath}/company/queryPositionInfoByCom?page=${info.pages}">尾页</a>
+        当前是${info.pageNum}页
+    </div>
     </tbody>
 </table>
 </body>
